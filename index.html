@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawaii Plant Hardiness Zone Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background-color: #4caf50;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+            margin-bottom: 2em;
+        }
+        h1 {
+            margin: 0;
+        }
+        .tropical-border {
+            border: 10px solid transparent;
+            border-image: url('https://example.com/tropical-leaf-border.png') 30 round;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #hardiness-calculator {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #4caf50;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #zone-result {
+            margin-top: 20px;
+            font-weight: bold;
+            background-color: #f1f8e9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 2em;
+            padding: 1em 0;
+            background-color: #4caf50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Hawaii Plant Hardiness Zone Calculator</h1>
+    </header>
+    <div class="container">
+        <div class="tropical-border">
+            <p>Welcome to our Hawaii Plant Hardiness Zone Calculator! Enter your zipcode to find out which plants are best suited for your area.</p>
+            <div id="hardiness-calculator">
+                <input type="text" id="zipcode-input" placeholder="Enter Hawaii zipcode">
+                <button onclick="calculateZone()">Calculate Zone</button>
+                <div id="zone-result"></div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Hawaii Plant Hardiness Zone Calculator. All rights reserved.</p>
+    </footer>
+
+
+        <style>
+  #hardiness-calculator {
+    font-family: Arial, sans-serif;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  #zone-result {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+</style>
+
+<div id="hardiness-calculator">
+  <h3>Hawaii Hardiness Zone Calculator</h3>
+  <input type="text" id="zipcode-input" placeholder="Enter Hawaii zipcode">
+  <button onclick="calculateZone()">Calculate Zone</button>
+  <div id="zone-result"></div>
+</div>
+
+<script>
+const hawaiiZones = {
+  '96701': '12a', '96703': '12a', '96704': '12b', '96705': '12b', '96706': '12b',
+  '96707': '12b', '96708': '12a', '96709': '12b', '96710': '12b', '96712': '12b',
+  '96713': '11b', '96714': '12a', '96716': '12b', '96717': '12b', '96718': '11a',
+  '96719': '12b', '96720': '11a', '96721': '12b', '96722': '12b', '96725': '11a',
+  '96726': '11a', '96727': '10b', '96728': '12b', '96729': '12b', '96730': '12b',
+  '96731': '12b', '96732': '12b', '96733': '12b', '96734': '12b', '96737': '11b',
+  '96738': '12a', '96739': '13a', '96740': '12b', '96741': '12a', '96742': '12b',
+  '96743': '11a', '96744': '12b', '96745': '12b', '96746': '12a', '96747': '12b',
+  '96748': '12b', '96749': '12b', '96750': '12b', '96751': '12b', '96752': '12b',
+  '96753': '12b', '96754': '12b', '96755': '12b', '96756': '12b', '96757': '12a',
+  '96759': '12a', '96760': '12a', '96761': '12b', '96762': '12b', '96763': '12b',
+  '96764': '12b', '96765': '12a', '96766': '12a', '96768': '12b', '96769': '12a',
+  '96770': '12b', '96771': '11b', '96772': '12b', '96773': '11a', '96774': '11a',
+  '96776': '11a', '96777': '12b', '96778': '12b', '96779': '12b', '96780': '12b',
+  '96781': '12a', '96782': '12a', '96783': '12b', '96784': '12b', '96785': '11a',
+  '96786': '12a', '96788': '12a', '96789': '12a', '96790': '12a', '96791': '12a',
+  '96792': '12b', '96793': '12b', '96795': '12b', '96796': '12b', '96797': '12a',
+  '96801': '12b', '96802': '12b', '96803': '12b', '96804': '12b', '96805': '12b',
+  '96806': '12b', '96807': '12b', '96808': '12b', '96809': '12b', '96810': '12b',
+  '96811': '12b', '96812': '12b', '96813': '12b'
+};
+
+const zoneDescriptions = {
+  '10b': 'Zone 10b: Average annual extreme minimum temperature between 35 to 40°F (1.7 to 4.4°C). Suitable for many tropical and subtropical plants.',
+  '11a': 'Zone 11a: Average annual extreme minimum temperature between 40 to 45°F (4.4 to 7.2°C). Ideal for a wide variety of tropical plants.',
+  '11b': 'Zone 11b: Average annual extreme minimum temperature between 45 to 50°F (7.2 to 10°C). Perfect for most tropical plants and some more cold-sensitive species.',
+  '12a': 'Zone 12a: Average annual extreme minimum temperature between 50 to 55°F (10 to 12.8°C). Excellent for growing a vast array of tropical plants year-round.',
+  '12b': 'Zone 12b: Average annual extreme minimum temperature between 55 to 60°F (12.8 to 15.6°C). Ideal for even the most cold-sensitive tropical plants.',
+  '13a': 'Zone 13a: Average annual extreme minimum temperature between 60 to 65°F (15.6 to 18.3°C). Suitable for the most tender tropical plants; rare in the United States.'
+};
+
+function calculateZone() {
+  const zipcode = document.getElementById("zipcode-input").value;
+  const result = document.getElementById("zone-result");
+  
+  if (hawaiiZones[zipcode]) {
+    const zone = hawaiiZones[zipcode];
+    result.innerHTML = `Hardiness Zone for zipcode ${zipcode}: ${zone}<br><br>${zoneDescriptions[zone]}`;
+  } else {
+    result.innerHTML = "Please enter a valid Hawaii zipcode";
+  }
+}
+
+// Add event listener for Enter key
+document.getElementById("zipcode-input").addEventListener("keyup", function(event) {
+  if (event.key === "Enter") {
+    calculateZone();
+  }
+});
+    </script>
+</body>
+</html>
